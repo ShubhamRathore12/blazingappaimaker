@@ -17,7 +17,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 // Middleware
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://blazingappaimaker-client.vercel.app',
+    /\.vercel\.app$/,
+  ],
+  credentials: true,
+}));
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
