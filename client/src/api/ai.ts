@@ -24,7 +24,10 @@ export function streamMessage(
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const token = localStorage.getItem('token');
-    const apiBase = import.meta.env.VITE_API_URL || '/api';
+    const apiBase = import.meta.env.VITE_API_URL
+      || (window.location.hostname.includes('vercel.app')
+        ? 'https://blazingappaimaker.onrender.com/api'
+        : '/api');
     fetch(`${apiBase}/ai/conversations/${conversationId}/messages`, {
       method: 'POST',
       headers: {
