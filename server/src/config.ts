@@ -2,7 +2,11 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-dotenv.config({ path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.env') });
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Load .env from project root (works in both dev and production)
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 export const config = {
   port: parseInt(process.env.PORT || '3001', 10),
@@ -12,4 +16,5 @@ export const config = {
   openaiApiKey: process.env.OPENAI_API_KEY || '',
   geminiApiKey: process.env.GEMINI_API_KEY || '',
   groqApiKey: process.env.GROQ_API_KEY || '',
+  nodeEnv: process.env.NODE_ENV || 'development',
 };

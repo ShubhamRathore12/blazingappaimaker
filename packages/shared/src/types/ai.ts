@@ -5,7 +5,7 @@ export interface Message {
   conversationId: string;
   role: MessageRole;
   content: string;
-  metadata: Record<string, unknown> | null;
+  metadata: string | null;
   createdAt: string;
 }
 

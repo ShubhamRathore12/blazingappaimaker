@@ -5,9 +5,11 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./src",
+    "noEmit": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": ["vite/client"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/vite-env.d.ts"]
 }

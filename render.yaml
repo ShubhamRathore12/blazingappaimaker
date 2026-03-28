@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: lovable-clone
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npx tsx server/src/db/migrate.ts && NODE_ENV=production npx tsx server/src/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PROJECTS_ROOT
+        value: /opt/render/project/src/projects-data
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/lovable-clone.db
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

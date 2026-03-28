@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { config } from './config.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import routes from './routes/index.js';
@@ -11,11 +13,12 @@ import { OpenAIProvider } from './ai/providers/openai.provider.js';
 import { GeminiProvider } from './ai/providers/gemini.provider.js';
 import { GroqProvider } from './ai/providers/groq.provider.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(cors({ origin: true, credentials: true }));
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 
@@ -26,6 +29,15 @@ app.use('/api', routes);
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', providers: aiRegistry.list() });
 });
+
+// Serve frontend static files in production
+if (config.nodeEnv === 'production') {
+  const clientDist = path.resolve(__dirname, '../../client/dist');
+  app.use(express.static(clientDist));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 // Error handler
 app.use(errorHandler);

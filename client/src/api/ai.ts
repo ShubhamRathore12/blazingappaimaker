@@ -24,7 +24,8 @@ export function streamMessage(
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const token = localStorage.getItem('token');
-    fetch(`/api/ai/conversations/${conversationId}/messages`, {
+    const apiBase = import.meta.env.VITE_API_URL || '/api';
+    fetch(`${apiBase}/ai/conversations/${conversationId}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
