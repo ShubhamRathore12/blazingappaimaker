@@ -30,19 +30,19 @@ export class ProjectService {
       id: convId, projectId: id, title: 'Main',
     });
 
-    return db.select().from(schema.projects).where(eq(schema.projects.id, id)).get();
+    const [project] = await db.select().from(schema.projects).where(eq(schema.projects.id, id));
+    return project;
   }
 
   async list(userId: string) {
     return db.select().from(schema.projects)
-      .where(and(eq(schema.projects.userId, userId), eq(schema.projects.status, 'active')))
-      .all();
+      .where(and(eq(schema.projects.userId, userId), eq(schema.projects.status, 'active')));
   }
 
   async get(projectId: string, userId: string) {
-    return db.select().from(schema.projects)
-      .where(and(eq(schema.projects.id, projectId), eq(schema.projects.userId, userId)))
-      .get();
+    const [project] = await db.select().from(schema.projects)
+      .where(and(eq(schema.projects.id, projectId), eq(schema.projects.userId, userId)));
+    return project;
   }
 
   async delete(projectId: string, userId: string) {

@@ -48,8 +48,8 @@ router.post('/conversations/:convId/messages', validate(sendMessageSchema), asyn
   const { db, schema } = await import('../db/index.js');
   const { eq } = await import('drizzle-orm');
 
-  const conversation = await db.select().from(schema.conversations)
-    .where(eq(schema.conversations.id, req.params.convId)).get();
+  const [conversation] = await db.select().from(schema.conversations)
+    .where(eq(schema.conversations.id, req.params.convId));
 
   if (!conversation) {
     res.status(404).json({ success: false, error: 'Conversation not found' });

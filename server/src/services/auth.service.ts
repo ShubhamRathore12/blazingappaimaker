@@ -7,7 +7,7 @@ import { config } from '../config.js';
 
 export class AuthService {
   async signup(email: string, password: string, name: string) {
-    const existing = await db.select().from(schema.users).where(eq(schema.users.email, email)).get();
+    const [existing] = await db.select().from(schema.users).where(eq(schema.users.email, email));
     if (existing) {
       throw new Error('Email already registered');
     }
@@ -17,7 +17,7 @@ export class AuthService {
 
     await db.insert(schema.users).values({ id, email, passwordHash, name });
 
-    const user = await db.select().from(schema.users).where(eq(schema.users.id, id)).get();
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.id, id));
     const token = this.generateToken(id);
 
     return {
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await db.select().from(schema.users).where(eq(schema.users.email, email)).get();
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
     if (!user) {
       throw new Error('Invalid email or password');
     }
@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   async getUser(userId: string) {
-    const user = await db.select().from(schema.users).where(eq(schema.users.id, userId)).get();
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.id, userId));
     if (!user) return null;
     return { id: user.id, email: user.email, name: user.name, createdAt: user.createdAt, updatedAt: user.updatedAt };
   }

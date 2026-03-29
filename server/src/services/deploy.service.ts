@@ -9,13 +9,14 @@ export class DeployService {
     await db.insert(schema.deployments).values({ id, buildId, store });
     // Simulate deployment
     this.simulateDeploy(id, store);
-    return db.select().from(schema.deployments).where(eq(schema.deployments.id, id)).get();
+    const [deployment] = await db.select().from(schema.deployments).where(eq(schema.deployments.id, id));
+    return deployment;
   }
 
   async get(deployId: string) {
-    return db.select().from(schema.deployments)
-      .where(eq(schema.deployments.id, deployId))
-      .get();
+    const [deployment] = await db.select().from(schema.deployments)
+      .where(eq(schema.deployments.id, deployId));
+    return deployment;
   }
 
   private async simulateDeploy(deployId: string, store: DeployStore) {

@@ -10,19 +10,19 @@ export class BuildService {
     // In a real system, this would enqueue a build job
     // For MVP, we simulate the build process
     this.simulateBuild(id);
-    return db.select().from(schema.builds).where(eq(schema.builds.id, id)).get();
+    const [build] = await db.select().from(schema.builds).where(eq(schema.builds.id, id));
+    return build;
   }
 
   async list(projectId: string) {
     return db.select().from(schema.builds)
-      .where(eq(schema.builds.projectId, projectId))
-      .all();
+      .where(eq(schema.builds.projectId, projectId));
   }
 
   async get(buildId: string) {
-    return db.select().from(schema.builds)
-      .where(eq(schema.builds.id, buildId))
-      .get();
+    const [build] = await db.select().from(schema.builds)
+      .where(eq(schema.builds.id, buildId));
+    return build;
   }
 
   private async simulateBuild(buildId: string) {

@@ -11,19 +11,20 @@ export class AIService {
   async getConversations(projectId: string) {
     return db.select().from(schema.conversations)
       .where(eq(schema.conversations.projectId, projectId))
-      .all();
+;
   }
 
   async getMessages(conversationId: string) {
     return db.select().from(schema.messages)
       .where(eq(schema.messages.conversationId, conversationId))
-      .all();
+;
   }
 
   async createConversation(projectId: string, title?: string) {
     const id = nanoid();
     await db.insert(schema.conversations).values({ id, projectId, title: title || 'New Chat' });
-    return db.select().from(schema.conversations).where(eq(schema.conversations.id, id)).get();
+    const [conv] = await db.select().from(schema.conversations).where(eq(schema.conversations.id, id));
+    return conv;
   }
 
   async *streamMessage(
@@ -42,7 +43,7 @@ export class AIService {
     // Load history
     const history = await db.select().from(schema.messages)
       .where(eq(schema.messages.conversationId, conversationId))
-      .all();
+;
 
     // Build file tree string
     const tree = await fileManager.readTree(storagePath);
