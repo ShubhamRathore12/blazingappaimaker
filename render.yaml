@@ -16,6 +16,10 @@ services:
         value: /opt/render/project/src/projects-data
       - key: DATABASE_PATH
         value: /opt/render/project/src/lovable-clone.db
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
       - key: GROQ_API_KEY
         sync: false
       - key: GEMINI_API_KEY
